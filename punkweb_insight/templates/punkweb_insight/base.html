@@ -1,0 +1,61 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Punkweb Insight</title>
+  <link rel="stylesheet" href="{% static 'punkweb_insight/vendor/open-color.css' %}" />
+  <link rel="stylesheet" href="{% static 'punkweb_insight/css/defaults.css' %}" />
+  <link rel="stylesheet" href="{% static 'punkweb_insight/css/variables.css' %}" />
+  <link rel="stylesheet" href="{% static 'punkweb_insight/css/typography.css' %}" />
+  <link rel="stylesheet" href="{% static 'punkweb_insight/css/punkweb.css' %}" />
+  <link rel="stylesheet" href="{% static 'punkweb_insight/css/punkweb-modal.css' %}" />
+  {% block extra_head%}{% endblock extra_head %}
+</head>
+<body>
+  <div class="layout">
+    <header>
+      <nav class="nav">
+        <div class="nav__upper">
+          <div class="container">
+            <div class="nav__upper__content">
+              {% if request.user.is_staff %}
+              <div class="nav__upper__links">
+                <a class="nav__upper__link" href="{% url 'admin:index' %}">Admin</a>
+              </div>
+              {% endif %}
+              <div class="nav__spacer"></div>
+            </div>
+          </div>
+        </div>
+        <div class="nav__main">
+          <div class="container">
+            <div class="nav__main__content">
+              <a class="nav__title" href="{% url 'punkweb_insight:index' %}">
+                PUNKWEB
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main class="main">
+      <div class="container">
+        {% block content %}
+        {% endblock content %}
+      </div>
+    </main>
+    <footer>
+      <div class="footer">
+        <div class="container">
+          <div class="footer__content">
+            <div>Powered by <a href="#" target="_blank">Punkweb Insight</a></div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

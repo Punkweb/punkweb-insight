@@ -1,0 +1,96 @@
+{% extends 'punkweb_insight/base.html' %}
+{% load static duration %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'punkweb_insight/css/index.css' %}" />
+{% endblock %}
+
+{% block content %}
+<h1>Insights</h1>
+
+<form class="index__filters" method="get">
+  <div class="index__filters__field">
+    <label class="pw-input-label" for="start">Start</label>
+    <input class="pw-input" type="date" name="start" id="start" value="{{ start }}">
+  </div>
+  <div class="index__filters__field">
+    <label class="pw-input-label" for="end">End</label>
+    <input class="pw-input" type="date" name="end" id="end" value="{{ end }}">
+  </div>
+  <button class="pw-button raised primary" type="submit">Filter</button>
+</form>
+
+<div class="pw-card">
+  <div class="pw-card-header">Statistics</div>
+  <div class="index__statistics__content">
+    <div class="index__statistics__list">
+      <div class="index__statistics__row">
+        <div class="index__statistics__label">Sessions:</div>
+        <div class="index__statistics__value">
+          {{total_sessions}}
+        </div>
+      </div>
+      <div class="index__statistics__row">
+        <div class="index__statistics__label">Page Views:</div>
+        <div class="index__statistics__value">{{total_page_views}}</div>
+      </div>
+      <div class="index__statistics__row">
+        <div class="index__statistics__label">New Users:</div>
+        <div class="index__statistics__value">{{total_new_users}}</div>
+      </div>
+      <div class="index__statistics__row">
+        <div class="index__statistics__label">Time On Site:</div>
+        <div class="index__statistics__value">{{total_time_on_site|duration}}</div>
+      </div>
+      <div class="index__statistics__row">
+        <div class="index__statistics__label">Avg. Time On Site:</div>
+        <div class="index__statistics__value">{{average_time_on_site|duration}}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2>Sessions</h2>
+
+<table class="pw-table">
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Start Time</th>
+      <th>Time on Site</th>
+      <th>IP Address</th>
+      <th>Page views</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for visitor in visitors %}
+    <tr>
+      <td>{% if visitor.user %}{{visitor.user.username}}{% else %}Anonymous{% endif %}</td>
+      <td>{{ visitor.start_time }}</td>
+      <td>{{ visitor.time_on_site|duration }}</td>
+      <td>{{ visitor.ip_address }}</td>
+      <td>{{ visitor.page_views.count }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2>Page views</h2>
+
+<table class="pw-table">
+  <thead>
+    <tr>
+      <th>Page</th>
+      <th>Session</th>
+  </thead>
+  <tbody>
+    {% for event in page_views %}
+    <tr>
+      <td>{{ event.url }}</td>
+      <td>{{ event.visitor }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

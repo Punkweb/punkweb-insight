@@ -1,0 +1,20 @@
+# pycache
+__pycache__
+
+# dev virtual env
+venv
+
+# dev database
+*.sqlite3
+
+# dev media
+server
+
+# coverage
+.coverage
+htmlcov
+
+# dist
+build
+dist
+*.egg-info

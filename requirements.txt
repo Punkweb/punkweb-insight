@@ -1,0 +1,8 @@
+Django==4.2.11
+
+# Example Project
+Pillow
+djangorestframework
+
+# Testing
+coverage
