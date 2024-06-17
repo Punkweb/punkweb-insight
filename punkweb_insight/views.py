@@ -1,26 +1,29 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render
 from django.utils import timezone
 
+from punkweb_insight.forms import IndexFiltersForm
 from punkweb_insight.models import PageView, Visitor
 
 User = get_user_model()
 
 
 @login_required
+@permission_required("punkweb_insight.view_page_view", raise_exception=True)
 def index_view(request):
-    if not request.user.has_perm("punkweb_insight.view_page_view"):
-        return HttpResponseForbidden()
+    end = timezone.now()
+    start = end - timezone.timedelta(days=7)
 
-    default_start = (
-        (timezone.now() - timezone.timedelta(days=7)).date().strftime("%Y-%m-%d")
-    )
-    default_end = timezone.now().date().strftime("%Y-%m-%d")
+    defaults = {
+        "start": start,
+        "end": end,
+    }
 
-    start = request.GET.get("start", default_start)
-    end = request.GET.get("end", default_end)
+    form = IndexFiltersForm(request.GET or defaults)
+    if form.is_valid():
+        start = form.cleaned_data["start"] or start
+        end = form.cleaned_data["end"] or end
 
     visitors = Visitor.objects.filter(
         start_time__date__gte=start,
@@ -44,8 +47,7 @@ def index_view(request):
     average_time_on_site = total_time_on_site / total_sessions if total_sessions else 0
 
     context = {
-        "start": start,
-        "end": end,
+        "form": form,
         "visitors": visitors,
         "page_views": page_views,
         "new_users": new_users,
