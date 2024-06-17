@@ -1,56 +1,55 @@
 {% extends 'punkweb_insight/base.html' %}
 {% load static duration %}
 
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'punkweb_insight/css/index.css' %}" />
-{% endblock %}
-
 {% block content %}
-<h1>Insights</h1>
+<h1>Punkweb Insights</h1>
 
-<form class="index__filters" method="get">
-  <div class="index__filters__field">
-    <label class="pw-input-label" for="start">Start</label>
-    <input class="pw-input" type="date" name="start" id="start" value="{{ start }}">
+<form class="pw-form inline my-4" method="get">
+  {% for field in form %}
+  <div class="pw-form-group">
+    <label class="pw-input-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+    {{ field }}
   </div>
-  <div class="index__filters__field">
-    <label class="pw-input-label" for="end">End</label>
-    <input class="pw-input" type="date" name="end" id="end" value="{{ end }}">
+  {% endfor %}
+  {% if form.non_field_errors %}
+  {{ form.non_field_errors }}
+  {% endif %}
+  <div class="pw-form-actions">
+    <button class="pw-button raised" type="submit">Filter</button>
   </div>
-  <button class="pw-button raised primary" type="submit">Filter</button>
 </form>
 
-<div class="pw-card">
+<div class="pw-card" style="width: fit-content;">
   <div class="pw-card-header">Statistics</div>
-  <div class="index__statistics__content">
-    <div class="index__statistics__list">
-      <div class="index__statistics__row">
-        <div class="index__statistics__label">Sessions:</div>
-        <div class="index__statistics__value">
+  <div class="pw-card-content">
+    <div class="flex flex-column text-size-xs">
+      <div class="flex justify-between align-center">
+        <div>Visitors:</div>
+        <div>
           {{total_sessions}}
         </div>
       </div>
-      <div class="index__statistics__row">
-        <div class="index__statistics__label">Page Views:</div>
-        <div class="index__statistics__value">{{total_page_views}}</div>
+      <div class="flex justify-between align-center">
+        <div>Page Views:</div>
+        <div>{{total_page_views}}</div>
       </div>
-      <div class="index__statistics__row">
-        <div class="index__statistics__label">New Users:</div>
-        <div class="index__statistics__value">{{total_new_users}}</div>
+      <div class="flex justify-between align-center">
+        <div>New Users:</div>
+        <div>{{total_new_users}}</div>
       </div>
-      <div class="index__statistics__row">
-        <div class="index__statistics__label">Time On Site:</div>
-        <div class="index__statistics__value">{{total_time_on_site|duration}}</div>
+      <div class="flex justify-between align-center">
+        <div>Time On Site:</div>
+        <div>{{total_time_on_site|duration}}</div>
       </div>
-      <div class="index__statistics__row">
-        <div class="index__statistics__label">Avg. Time On Site:</div>
-        <div class="index__statistics__value">{{average_time_on_site|duration}}</div>
+      <div class="flex justify-between align-center">
+        <div>Avg. Time On Site:</div>
+        <div>{{average_time_on_site|duration}}</div>
       </div>
     </div>
   </div>
 </div>
 
-<h2>Sessions</h2>
+<h2>Visitors</h2>
 
 <table class="pw-table">
   <thead>
