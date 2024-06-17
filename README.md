@@ -28,6 +28,16 @@ INSTALLED_APPS = [
 ]
 ```
 
+Add the following middleware to your `MIDDLEWARE` in your Django settings module, before `SessionMiddleware`:
+
+```python
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "punkweb_insight.middleware.InsightMiddleware", # Here, before SessionMiddleware
+    "django.contrib.sessions.middleware.SessionMiddleware",
+]
+```
+
 Add the following URL pattern to your `urls.py`:
 
 ```python
