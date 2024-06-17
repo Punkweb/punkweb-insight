@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 
+from punkweb_insight.managers import PageViewManager
+
 User = get_user_model()
 
 
@@ -43,6 +45,8 @@ class PageView(models.Model):
     query_string = models.TextField(blank=True)
     referrer = models.CharField(max_length=2048, blank=True)
     method = models.CharField(max_length=8, blank=True)
+
+    objects = PageViewManager()
 
     class Meta:
         ordering = ("-created_at",)
