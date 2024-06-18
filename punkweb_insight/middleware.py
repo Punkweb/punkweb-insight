@@ -1,4 +1,6 @@
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_ipv46_address
 from django.db import IntegrityError, transaction
 from django.urls import reverse
 from django.utils import timezone
@@ -15,9 +17,24 @@ class InsightMiddleware:
 
     def is_bot(self, request):
         user_agent = request.META.get("HTTP_USER_AGENT", "").lower()
-        bot_agents = ["bot", "crawl", "spider", "slurp"]
 
-        return any(agent in user_agent for agent in bot_agents)
+        if not user_agent:
+            return True
+
+        bot_agents = ["bot", "crawl", "spider", "slurp"]
+        suspicious_paths = [
+            "/admin.php",
+            "/admin-post.php",
+            "/admin-ajax.php",
+        ]
+
+        if any(agent in user_agent for agent in bot_agents):
+            return True
+
+        if any(request.path.lower().startswith(path) for path in suspicious_paths):
+            return True
+
+        return False
 
     def check_path(self, request):
         path = request.path
@@ -49,13 +66,36 @@ class InsightMiddleware:
 
         return True
 
+    def get_client_ip(self, request):
+        headers = (
+            "HTTP_X_FORWARDED_FOR",
+            "HTTP_X_REAL_IP",
+            "HTTP_CLIENT_IP",
+            "HTTP_X_CLIENT_IP",
+            "HTTP_X_CLUSTER_CLIENT_IP",
+            "HTTP_FORWARDED_FOR",
+            "HTTP_FORWARDED",
+            "REMOTE_ADDR",
+        )
+
+        for header in headers:
+            ip = request.META.get(header, None)
+            if ip:
+                try:
+                    validate_ipv46_address(ip)
+                    return ip
+                except ValidationError:
+                    pass
+
+        return ""
+
     def refresh_visitor(self, request):
         session_key = request.session.session_key
 
         try:
             visitor = Visitor.objects.get(session_key=session_key)
         except Visitor.DoesNotExist:
-            ip_address = request.META.get("REMOTE_ADDR", "")
+            ip_address = self.get_client_ip(request)
             visitor = Visitor(pk=session_key, ip_address=ip_address)
 
         user = request.user if request.user.is_authenticated else None
