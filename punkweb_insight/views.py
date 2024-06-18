@@ -51,7 +51,7 @@ def index_view(request):
     base_url = request.build_absolute_uri("/")[:-1]
 
     popular_referrers = PageView.objects.popular_referrers(
-        start=start, end=end, exclude_base_url=base_url
+        start=start, end=end, base_url=base_url
     )
 
     context = {

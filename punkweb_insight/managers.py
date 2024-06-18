@@ -18,14 +18,14 @@ class PageViewManager(models.Manager):
 
         return page_views
 
-    def popular_referrers(self, start, end, exclude_base_url, limit=10):
+    def popular_referrers(self, start, end, base_url, limit=10):
         page_views = (
             self.filter(
                 created_at__date__gte=start,
                 created_at__date__lte=end,
             )
             .exclude(referrer__exact="")
-            .exclude(referrer__startswith=exclude_base_url)
+            .exclude(referrer__startswith=base_url)
             .values("referrer")
             .annotate(
                 total_views=models.Count("referrer"),
