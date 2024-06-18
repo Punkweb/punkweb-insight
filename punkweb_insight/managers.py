@@ -24,6 +24,7 @@ class PageViewManager(models.Manager):
                 created_at__date__gte=start,
                 created_at__date__lte=end,
             )
+            .exclude(referrer__exact="")
             .exclude(referrer__startswith=exclude_base_url)
             .values("referrer")
             .annotate(
