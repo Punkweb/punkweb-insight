@@ -2,6 +2,39 @@ from django.db import models
 
 
 class PageViewManager(models.Manager):
+    def popular(self, start, end, limit=10):
+        page_views = (
+            self.filter(
+                created_at__date__gte=start,
+                created_at__date__lte=end,
+            )
+            .values("url")
+            .annotate(
+                total_views=models.Count("url"),
+                unique_visitors=models.Count("visitor", distinct=True),
+            )
+            .order_by("-total_views")[:limit]
+        )
+
+        return page_views
+
+    def popular_referrers(self, start, end, exclude_base_url, limit=10):
+        page_views = (
+            self.filter(
+                created_at__date__gte=start,
+                created_at__date__lte=end,
+            )
+            .exclude(referrer__startswith=exclude_base_url)
+            .values("referrer")
+            .annotate(
+                total_views=models.Count("referrer"),
+                unique_visitors=models.Count("visitor", distinct=True),
+            )
+            .order_by("-total_views")[:limit]
+        )
+
+        return page_views
+
     def data_chartjs(self, start, end, exclude_staff=False):
         page_views = self.filter(
             created_at__date__gte=start,
