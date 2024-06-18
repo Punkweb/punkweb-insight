@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="punkweb_insight",
-    version="0.0.2",
+    version="0.0.3",
     author="Punkweb",
     author_email="punkwebnet@gmail.com",
     packages=["punkweb_insight"],
