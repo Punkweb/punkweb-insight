@@ -46,10 +46,15 @@ hr {
   font-weight: 500;
 }
 
+.pw-form.inline {
+  flex-wrap: wrap;
+}
+
 /** Table **/
 
 .pw-table-container {
   overflow-x: auto;
+  width: 100%;
 }
 
 .pw-table {
@@ -65,7 +70,6 @@ hr {
   font-size: 0.875rem;
   font-weight: 700;
   padding: 0.75rem 1rem;
-  text-align: left;
 }
 
 .pw-table tbody tr td {
