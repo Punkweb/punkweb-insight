@@ -38,24 +38,33 @@ def index_view(request):
     new_users = User.objects.filter(
         date_joined__date__gte=start,
         date_joined__date__lte=end,
-    )
+    ).order_by("-date_joined")
 
-    total_sessions = visitors.count()
+    total_visitors = visitors.count()
     total_page_views = page_views.count()
     total_new_users = new_users.count()
     total_time_on_site = sum([visitor.time_on_site for visitor in visitors])
-    average_time_on_site = total_time_on_site / total_sessions if total_sessions else 0
+    average_time_on_site = total_time_on_site / total_visitors if total_visitors else 0
+
+    popular_pages = PageView.objects.popular(start=start, end=end)
+
+    base_url = request.build_absolute_uri("/")[:-1]
+
+    popular_referrers = PageView.objects.popular_referrers(
+        start=start, end=end, exclude_base_url=base_url
+    )
 
     context = {
         "form": form,
-        "visitors": visitors,
-        "page_views": page_views,
-        "new_users": new_users,
-        "total_sessions": total_sessions,
+        "total_visitors": total_visitors,
         "total_page_views": total_page_views,
         "total_new_users": total_new_users,
         "total_time_on_site": total_time_on_site,
         "average_time_on_site": average_time_on_site,
+        "recent_visitors": visitors[:10],
+        "new_users": new_users[:10],
+        "popular_pages": popular_pages,
+        "popular_referrers": popular_referrers,
     }
 
     return render(request, "punkweb_insight/index.html", context=context)
