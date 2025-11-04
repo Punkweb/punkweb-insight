@@ -1,0 +1,50 @@
+{% extends 'insight/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <a href="{% url 'insight:page_stats_index' %}">&larr; Back to page stats</a>
+  <section class="my-8">
+    <h1>Page stats</h1>
+    <h3>{{ page_url }}</h3>
+    <p>Total views: {{ total_views }}</p>
+
+    {% include 'insight/partials/date_filter_form.html' %}
+
+    <div class="pw-table-container mb-4">
+      <table>
+        <colgroup>
+          <col />
+          <col style="width: 7rem" />
+          <col style="width: 7rem" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Method</th>
+            <th>Visitor</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for page_view in page_views %}
+            <tr>
+              <td>
+                <a href="{% url 'insight:page_view_detail' page_view.pk %}">
+                  <time datetime="{{ page_view.created_at|date:'c' }}">
+                    {{ page_view.created_at|date:'M j, Y' }} at
+                    {{ page_view.created_at|date:'g:i A' }}
+                  </time>
+                </a>
+              </td>
+              <td>{{ page_view.method }}</td>
+              <td>{{ page_view.user|default:"-" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% include 'insight/partials/pagination.html' with page=page_views %}
+
+  </section>
+{% endblock %}

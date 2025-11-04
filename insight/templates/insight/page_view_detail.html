@@ -1,0 +1,43 @@
+{% extends 'insight/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <a href="{% url 'insight:page_view_index' %}">&larr; Back to page views</a>
+  <section class="my-8">
+    <h1>{{ page_view }}</h1>
+    <div class="pw-card fluid my-8">
+      <label>URL</label>
+      <p>{{ page_view.url }}</p>
+      <label>Method</label>
+      <p>{{ page_view.method }}</p>
+      <label>Visitor</label>
+      <p>
+        <a href="{% url 'insight:visitor_detail' page_view.visitor.pk %}">{{ page_view.visitor.user|default:"Anonymous" }}</a>
+      </p>
+      <label>Timestamp</label>
+      <p>
+        <time datetime="{{ page_view.created_at|date:'c' }}">
+          {{ page_view.created_at|date:'M j, Y' }} at
+          {{ page_view.created_at|date:'g:i A' }}
+        </time>
+      </p>
+      <label>Query string</label>
+      <p>
+        {% if page_view.query_string %}
+          {{ page_view.query_string }}
+        {% else %}
+          -
+        {% endif %}
+      </p>
+      <label>Referrer</label>
+      <p class="mb-0">
+        {% if page_view.referrer %}
+          {{ page_view.referrer }}
+        {% else %}
+          -
+        {% endif %}
+      </p>
+    </div>
+  </section>
+{% endblock %}

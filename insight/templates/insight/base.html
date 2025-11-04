@@ -1,0 +1,36 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Punkweb Insight</title>
+    <link rel="stylesheet"
+          href="{% static 'insight/vendor/punkweb-ui.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'insight/css/punkweb.css' %}" />
+    {% block extra_head %}
+    {% endblock extra_head %}
+  </head>
+  <body>
+    <div class="layout">
+      <main class="main py-8">
+        <div class="pw-container">
+          {% block content %}
+          {% endblock content %}
+        </div>
+      </main>
+      <footer>
+        <div class="footer">
+          <div class="pw-container">
+            <div class="footer__content">
+              <div>
+                Powered by <a href="https://github.com/Punkweb/punkweb-insight/" target="_blank">Punkweb Insight</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

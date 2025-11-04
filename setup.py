@@ -2,10 +2,10 @@ from setuptools import setup
 
 setup(
     name="punkweb_insight",
-    version="0.0.5",
+    version="0.1.0",
     author="Punkweb",
     author_email="punkwebnet@gmail.com",
-    packages=["punkweb_insight"],
+    packages=["insight"],
     url="https://github.com/Punkweb/punkweb-insight",
     license="BSD-3-Clause",
     description="Django application that provides visitor and page view tracking and an analytics dashboard for your Django website.",

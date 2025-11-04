@@ -1,0 +1,48 @@
+{% extends 'insight/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <a href="{% url 'insight:visitor_index' %}">&larr; Back to visitors</a>
+  <section class="my-8">
+    <h1>{{ visitor.user|default:"Anonymous" }}</h1>
+    <p>
+      <strong>Session started</strong>:
+      <time datetime="{{ visitor.start_time|date:'c' }}">
+        {{ visitor.start_time|date:'M j, Y' }} at
+        {{ visitor.start_time|date:'g:i A' }}
+      </time>
+    </p>
+    <p>
+      <strong>Page views</strong>: {{ visitor.page_views.count }}
+    </p>
+    <div class="flex items-center gap-2 mb-4">
+      <a class="pw-button"
+         href="{% url 'insight:visitor_history' visitor.pk %}">View history</a>
+    </div>
+    <div class="pw-table-container">
+      <table>
+        <colgroup>
+          <col />
+          <col style="width: 7rem" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Page</th>
+            <th>Views</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for page_view in page_views %}
+            <tr>
+              <td>
+                <a href="{% url 'insight:page_stats_detail' %}?url={{ page_view.url|urlencode }}">{{ page_view.url }}</a>
+              </td>
+              <td>{{ page_view.total_views }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endblock %}

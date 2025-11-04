@@ -1,0 +1,13 @@
+<form class="pw-form horizontal my-4" method="get">
+  {% for field in form %}
+    <div class="pw-form-group">
+      {{ field.label_tag }}
+      {{ field }}
+    </div>
+  {% endfor %}
+  {% if form.non_field_errors %}{{ form.non_field_errors }}{% endif %}
+  {% if page_url %}<input type="hidden" name="url" value="{{ page_url }}" />{% endif %}
+  <div class="pw-form-actions">
+    <button type="submit">Filter</button>
+  </div>
+</form>

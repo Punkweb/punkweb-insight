@@ -1,0 +1,134 @@
+{% extends 'insight/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <section class="mb-8">
+    <h1>Insights</h1>
+
+    {% include 'insight/partials/date_filter_form.html' %}
+
+  </section>
+  <section class="my-8">
+    <h2>Statistics</h2>
+    <ul class="text-sm">
+      <li>
+        <strong>Visitors</strong>: {{ total_visitors }}
+      </li>
+      <li>
+        <strong>Page Views</strong>: {{ total_page_views }}
+      </li>
+    </ul>
+  </section>
+  <section class="my-8">
+    <h2>Popular pages</h2>
+    <div class="flex items-center gap-2 mb-4">
+      <a class="pw-button" href="{% url 'insight:page_stats_index' %}">View page stats</a>
+      <a class="pw-button" href="{% url 'insight:page_view_index' %}">View history</a>
+    </div>
+    <div class="pw-table-container">
+      <table>
+        <colgroup>
+          <col />
+          <col style="width: 10rem" />
+          <col style="width: 10rem" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Page</th>
+            <th>Views</th>
+            <th>Visitors</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for page in popular_pages %}
+            <tr>
+              <td>
+                <a href="{% url 'insight:page_stats_detail' %}?url={{ page.url|urlencode }}">{{ page.url }}</a>
+              </td>
+              <td>{{ page.total_views }}</td>
+              <td>{{ page.total_visitors }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <section class="my-8">
+    <h2>Popular referrers</h2>
+    <div class="flex items-center gap-2 mb-4">
+      <a class="pw-button" href="{% url 'insight:referrer_stats_index' %}">View referrer stats</a>
+    </div>
+    <div class="pw-table-container">
+      <table>
+        <colgroup>
+          <col />
+          <col style="width: 10rem" />
+          <col style="width: 10rem" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Referrer</th>
+            <th>Views</th>
+            <th>Visitors</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for obj in popular_referrers %}
+            <tr>
+              <td>
+                <a href="{% url 'insight:referrer_stats_detail' %}?referrer={{ obj.referrer|urlencode }}">{{ obj.referrer }}</a>
+              </td>
+              <td>{{ obj.total_views }}</td>
+              <td>{{ obj.total_visitors }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <section class="my-8">
+    <h2>Recent visitors</h2>
+    <div class="flex items-center gap-2 mb-4">
+      <a class="pw-button" href="{% url 'insight:visitor_index' %}">View visitors</a>
+    </div>
+    <div class="pw-table-container">
+      <table>
+        <colgroup>
+          <col />
+          <col style="width: 16rem" />
+          <col style="width: 7rem" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Start time</th>
+            <th>Page views</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for visitor in recent_visitors %}
+            <tr>
+              <td>
+                <a href="{% url 'insight:visitor_detail' visitor.pk %}">
+                  {% if visitor.user %}
+                    {{ visitor.user.username }}
+                  {% else %}
+                    -
+                  {% endif %}
+                </a>
+              </td>
+              <td>
+                <time datetime="{{ visitor.start_time|date:'c' }}">
+                  {{ visitor.start_time|date:'M j, Y' }} at
+                  {{ visitor.start_time|date:'g:i A' }}
+                </time>
+              </td>
+              <td>{{ visitor.page_views.count }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endblock %}

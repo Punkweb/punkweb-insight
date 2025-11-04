@@ -1,0 +1,43 @@
+{% extends 'insight/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <a href="{% url 'insight:index' %}">&larr; Back to dashboard</a>
+  <section class="my-8">
+    <h1>Referrer stats</h1>
+
+    {% include 'insight/partials/date_filter_form.html' %}
+
+    <div class="pw-table-container mb-4">
+      <table>
+        <colgroup>
+          <col />
+          <col style="width: 10rem" />
+          <col style="width: 10rem" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Referrer</th>
+            <th>Views</th>
+            <th>Visitors</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for obj in popular_referrers %}
+            <tr>
+              <td>
+                <a href="{% url 'insight:referrer_stats_detail' %}?referrer={{ obj.referrer|urlencode }}">{{ obj.referrer }}</a>
+              </td>
+              <td>{{ obj.total_views }}</td>
+              <td>{{ obj.total_visitors }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% include 'insight/partials/pagination.html' with page=popular_referrers %}
+
+  </section>
+{% endblock %}

@@ -25,7 +25,7 @@ from example_project.views import home, other
 urlpatterns = [
     path("", home, name="home"),
     path("other/", other, name="other"),
-    path("insight/", include("punkweb_insight.urls")),
+    path("insight/", include("insight.urls")),
     path("admin/", admin.site.urls),
 ]
 

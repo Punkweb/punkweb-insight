@@ -11,7 +11,7 @@ class PageViewManager(models.Manager):
             .values("url")
             .annotate(
                 total_views=models.Count("url"),
-                unique_visitors=models.Count("visitor", distinct=True),
+                total_visitors=models.Count("visitor", distinct=True),
             )
             .order_by("-total_views")[:limit]
         )
@@ -29,7 +29,7 @@ class PageViewManager(models.Manager):
             .values("referrer")
             .annotate(
                 total_views=models.Count("referrer"),
-                unique_visitors=models.Count("visitor", distinct=True),
+                total_visitors=models.Count("visitor", distinct=True),
             )
             .order_by("-total_views")[:limit]
         )

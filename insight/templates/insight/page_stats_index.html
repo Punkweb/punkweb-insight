@@ -1,0 +1,43 @@
+{% extends 'insight/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <a href="{% url 'insight:index' %}">&larr; Back to dashboard</a>
+  <section class="my-8">
+    <h1>Page stats</h1>
+
+    {% include 'insight/partials/date_filter_form.html' %}
+
+    <div class="pw-table-container mb-4">
+      <table>
+        <colgroup>
+          <col />
+          <col style="width: 10rem" />
+          <col style="width: 10rem" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Page</th>
+            <th>Views</th>
+            <th>Visitors</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for page in popular_pages %}
+            <tr>
+              <td>
+                <a href="{% url 'insight:page_stats_detail' %}?url={{ page.url|urlencode }}">{{ page.url }}</a>
+              </td>
+              <td>{{ page.total_views }}</td>
+              <td>{{ page.total_visitors }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% include 'insight/partials/pagination.html' with page=popular_pages %}
+
+  </section>
+{% endblock %}

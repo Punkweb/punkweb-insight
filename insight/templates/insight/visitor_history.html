@@ -1,0 +1,61 @@
+{% extends 'insight/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <a href="{% url 'insight:visitor_detail' visitor.pk %}">&larr; Back to vistor</a>
+  <section class="my-8">
+    <h1>{{ visitor.user|default:"Anonymous" }}</h1>
+    <p>
+      <strong>Session started</strong>:
+      <time datetime="{{ visitor.start_time|date:'c' }}">
+        {{ visitor.start_time|date:'M j, Y' }} at
+        {{ visitor.start_time|date:'g:i A' }}
+      </time>
+    </p>
+    <p>
+      <strong>Page views</strong>: {{ visitor.page_views.count }}
+    </p>
+
+    {% include 'insight/partials/date_filter_form.html' %}
+
+    <div class="pw-table-container mb-4">
+      <table>
+        <colgroup>
+          <col />
+          <col style="width: 7rem" />
+          <col style="width: 7rem" />
+          <col style="width: 16rem" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>URL</th>
+            <th>Method</th>
+            <th>Visitor</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for page_view in page_views %}
+            <tr>
+              <td>
+                <a href="{% url 'insight:page_view_detail' page_view.pk %}">{{ page_view.url }}</a>
+              </td>
+              <td>{{ page_view.method }}</td>
+              <td>{{ page_view.user|default:"-" }}</td>
+              <td>
+                <time datetime="{{ page_view.created_at|date:'c' }}">
+                  {{ page_view.created_at|date:'M j, Y' }} at
+                  {{ page_view.created_at|date:'g:i A' }}
+                </time>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% include 'insight/partials/pagination.html' with page=page_views %}
+
+  </section>
+{% endblock %}

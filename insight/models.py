@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 
-from punkweb_insight.managers import PageViewManager
+from insight.managers import PageViewManager
 
 User = get_user_model()
 
@@ -15,25 +15,21 @@ class Visitor(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )
-    ip_address = models.GenericIPAddressField(blank=True, null=True)
-    user_agent = models.TextField(blank=True)
     start_time = models.DateTimeField(auto_now_add=True)
     expiry_age = models.IntegerField(blank=True, null=True)
     expiry_time = models.DateTimeField(blank=True, null=True)
-    time_on_site = models.IntegerField(default=0)
 
     class Meta:
         ordering = ("-start_time",)
 
+    @property
     def session_expired(self):
         if self.expiry_time:
             return self.expiry_time <= timezone.now()
         return False
 
-    session_expired.boolean = True
-
     def __str__(self):
-        return f"{self.session_key} - {self.user or 'Anonymous'}"
+        return f"{self.user or 'Anonymous'}"
 
 
 class PageView(models.Model):
@@ -52,4 +48,4 @@ class PageView(models.Model):
         ordering = ("-created_at",)
 
     def __str__(self):
-        return f"{self.visitor} - {self.url}"
+        return f"{self.visitor} - {self.url} - {self.created_at} "

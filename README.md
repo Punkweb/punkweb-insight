@@ -19,12 +19,12 @@ It may work with older versions of Python and Django, but it has not been tested
 pip install punkweb-insight
 ```
 
-Add `punkweb_insight` to your `INSTALLED_APPS` in your Django settings module:
+Add `insight` to your `INSTALLED_APPS` in your Django settings module:
 
 ```python
 INSTALLED_APPS = [
     ...
-    "punkweb_insight",
+    "insight",
 ]
 ```
 
@@ -34,7 +34,7 @@ Add the following middleware to your `MIDDLEWARE` in your Django settings module
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "punkweb_insight.middleware.InsightMiddleware", # Directly after SessionMiddleware
+    "insight.middleware.InsightMiddleware", # Directly after SessionMiddleware
 ]
 ```
 
@@ -45,7 +45,7 @@ from django.urls import path, include
 
 urlpatterns = [
     ...
-    path("insight/", include("punkweb_insight.urls")), # or any other path you want
+    path("insight/", include("insight.urls")), # or any other path you want
 ]
 ```
 
@@ -60,7 +60,7 @@ python manage.py migrate
 These are the default settings for Punkweb Insight, which can be overridden in your Django settings module:
 
 ```python
-PUNKWEB_INSIGHT = {}
+INSIGHT = {}
 ```
 
 ## Testing

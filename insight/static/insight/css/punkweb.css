@@ -1,0 +1,44 @@
+/* Layout */
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Footer */
+
+.footer {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  padding: 0.5rem 0;
+}
+
+.footer__content {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer a,
+.footer a:visited {
+  color: var(--muted-foreground);
+}
+
+table {
+  border: var(--border-width) solid var(--border);
+}
+
+th {
+  padding: 0.5rem;
+}
+
+td {
+  padding: 0.25rem 0.5rem;
+}

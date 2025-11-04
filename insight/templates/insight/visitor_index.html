@@ -1,0 +1,54 @@
+{% extends 'insight/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <a href="{% url 'insight:index' %}">&larr; Back to dashboard</a>
+  <section class="my-8">
+    <h1>Visitors</h1>
+
+    {% include 'insight/partials/date_filter_form.html' %}
+
+    <div class="pw-table-container mb-4">
+      <table>
+        <colgroup>
+          <col />
+          <col style="width: 16rem" />
+          <col style="width: 7rem" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Start time</th>
+            <th>Page views</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for visitor in visitors %}
+            <tr>
+              <td>
+                <a href="{% url 'insight:visitor_detail' visitor.pk %}">
+                  {% if visitor.user %}
+                    {{ visitor.user.username }}
+                  {% else %}
+                    -
+                  {% endif %}
+                </a>
+              </td>
+              <td>
+                <time datetime="{{ visitor.start_time|date:'c' }}">
+                  {{ visitor.start_time|date:'M j, Y' }} at
+                  {{ visitor.start_time|date:'g:i A' }}
+                </time>
+              </td>
+              <td>{{ visitor.page_views.count }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% include 'insight/partials/pagination.html' with page=visitors %}
+
+  </section>
+{% endblock %}
